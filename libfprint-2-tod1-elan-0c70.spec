@@ -1,3 +1,6 @@
+%global debug_package %{nil}
+%global udevrulesdir /usr/lib/udev/rules.d
+
 Name:           libfprint-2-tod1-elan-0c70
 Version:        0.1.0
 Release:        1%{?dist}
@@ -21,13 +24,18 @@ The binary was modified from the 04f3:0c4b package by changing byte 0x4b to 0x70
 %autosetup
 
 %install
-mkdir -p %{buildroot}%{_libdir}/libfprint-2/tod-1
-mkdir -p %{buildroot}%{_libdir}
-mkdir -p %{buildroot}%{_udevrulesdir}
+install -p -d -m 0755 %{buildroot}%{_libdir}/libfprint-2/tod-1
+install -p -d -m 0755 %{buildroot}%{_libdir}
+install -p -d -m 0755 %{buildroot}%{udevrulesdir}
 
-install -m 0755 usr/lib64/libfprint-2/tod-1/libfprint-2-tod1-elan.so %{buildroot}%{_libdir}/libfprint-2/tod-1/libfprint-2-tod1-elan.so
-install -m 0755 usr/lib64/libcrypto.so.1.1 %{buildroot}%{_libdir}/libcrypto.so.1.1
-install -m 0644 usr/lib/udev/rules.d/60-libfprint-2-tod1-elan.rules %{buildroot}%{_udevrulesdir}/60-libfprint-2-tod1-elan.rules
+install -m 0755 usr/lib64/libfprint-2/tod-1/libfprint-2-tod1-elan.so \
+  %{buildroot}%{_libdir}/libfprint-2/tod-1/libfprint-2-tod1-elan.so
+
+install -m 0755 usr/lib64/libcrypto.so.1.1 \
+  %{buildroot}%{_libdir}/libcrypto.so.1.1
+
+install -m 0644 usr/lib/udev/rules.d/60-libfprint-2-tod1-elan.rules \
+  %{buildroot}%{udevrulesdir}/60-libfprint-2-tod1-elan.rules
 
 %post
 udevadm control --reload-rules || :
@@ -38,7 +46,7 @@ udevadm control --reload-rules || :
 %files
 %{_libdir}/libfprint-2/tod-1/libfprint-2-tod1-elan.so
 %{_libdir}/libcrypto.so.1.1
-%{_udevrulesdir}/60-libfprint-2-tod1-elan.rules
+%{udevrulesdir}/60-libfprint-2-tod1-elan.rules
 
 %changelog
 * Mon May 04 2026 Nguyen Hai Dang <hi@haidang.dev> - 0.1.0-1
